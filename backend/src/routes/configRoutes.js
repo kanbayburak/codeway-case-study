@@ -7,7 +7,6 @@ const { FieldValue } = require("firebase-admin/firestore");
 const router = express.Router();
 const configsCollection = db.collection("configs");
 
-// 📱 Public config (sadece API_TOKEN ile erişim)
 router.get("/config", verifyApiToken, async (req, res) => {
   try {
     const snapshot = await configsCollection.get();
@@ -22,7 +21,6 @@ router.get("/config", verifyApiToken, async (req, res) => {
   }
 });
 
-// 🖥️ Admin config listesi (Firebase login gerekli)
 router.get("/admin/config", verifyFirebaseToken, async (req, res) => {
   try {
     const snapshot = await configsCollection.get();
@@ -46,7 +44,6 @@ router.get("/admin/config", verifyFirebaseToken, async (req, res) => {
 });
 
 
-// 🛠️ Update config (concurrency + createdAt/updatedAt)
 router.put("/admin/config/:key", verifyFirebaseToken, async (req, res) => {
   try {
     const { key } = req.params;
@@ -66,8 +63,8 @@ router.put("/admin/config/:key", verifyFirebaseToken, async (req, res) => {
     await docRef.set(
       {
         value,
-        updatedAt: FieldValue.serverTimestamp(), // 🔹 her güncellemede set edilir
-        createdAt: doc.exists ? doc.data().createdAt : FieldValue.serverTimestamp(), // 🔹 sadece ilk seferde set edilir
+        updatedAt: FieldValue.serverTimestamp(), 
+        createdAt: doc.exists ? doc.data().createdAt : FieldValue.serverTimestamp(), 
       },
       { merge: true }
     );
@@ -92,8 +89,8 @@ router.post("/admin/config", verifyFirebaseToken, async (req, res) => {
 
     await docRef.set({
       value: value,
-      description: description || "",   // description ekle
-      audiences: audiences || {},      // audiences boşsa {} olsun
+      description: description || "",
+      audiences: audiences || {},   
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     });

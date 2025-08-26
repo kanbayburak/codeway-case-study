@@ -22,7 +22,7 @@ const router = createRouter({
   routes
 })
 
-// 🔐 Login kontrolü
+
 router.beforeEach((to, from, next) => {
   const auth = getAuth()
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)

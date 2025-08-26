@@ -2,7 +2,7 @@
   <DefaultLayout>
     <div v-if="!loading" class="w-full h-full">
       <table class="w-full border border-gray-700 bg-gray-900 shadow-lg table-fixed">
-        <!-- tablo başlıkları -->
+     
         <thead>
           <tr class="bg-gray-800 text-gray-300 text-sm md:text-base">
             <th class="px-6 py-4 text-left w-1/5">Parameter Key</th>
@@ -13,7 +13,6 @@
           </tr>
         </thead>
 
-        <!-- tablo içeriği -->
         <tbody>
           <tr
             v-for="(param, index) in parameters"
@@ -42,7 +41,6 @@
             </td>
           </tr>
 
-          <!-- 🔽 Yeni Parametre Ekleme / Güncelleme satırı -->
           <tr class="border-t border-gray-700 bg-gray-900">
             <td class="px-6 py-3">
               <input
@@ -112,7 +110,7 @@ onMounted(async () => {
     }
     const userToken = await user.getIdToken();
 
-    // 🔹 admin endpoint → tüm config bilgilerini getiriyor
+
     const res = await axios.get("http://localhost:3001/api/admin/config", {
       headers: { Authorization: `Bearer ${userToken}` },
     });
@@ -146,7 +144,6 @@ const saveConfig = async () => {
 
   try {
     if (editIndex.value !== null) {
-      // UPDATE
       await axios.put(
         `http://localhost:3001/api/admin/config/${newKey.value}`,
         {
@@ -165,7 +162,6 @@ const saveConfig = async () => {
       };
       editIndex.value = null;
     } else {
-      // CREATE
       await axios.post(
         "http://localhost:3001/api/admin/config",
         {
@@ -185,7 +181,6 @@ const saveConfig = async () => {
       });
     }
 
-    // form alanlarını sıfırla
     newKey.value = "";
     newValue.value = "";
     newDescription.value = "";
@@ -208,7 +203,7 @@ const deleteConfig = async (index) => {
       headers: { Authorization: `Bearer ${userToken}` },
     });
 
-    parameters.value.splice(index, 1); // frontend'den de sil
+    parameters.value.splice(index, 1);
   } catch (err) {
     console.error("Delete error:", err.response?.data || err.message);
     alert("Config silinemedi!");
