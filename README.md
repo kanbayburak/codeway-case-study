@@ -52,11 +52,8 @@ npm run dev
 ## Deploy
 
 ### Frontend (Vercel)
-1. Vercel projesi oluşturun ve `frontend` klasörünü bağlayın.
-2. `VITE_*` environment değişkenlerini Vercel panelinden ekleyin.
-3. Deploy sonrası Vercel otomatik olarak frontend URL’ini verecektir.
+- Vercel’de frontend deploy edildi: [https://codeway-case-study-green.vercel.app](https://codeway-case-study-green.vercel.app)
 
 ### Backend (Render)
-1. Render üzerinde yeni bir Web Service oluşturun ve `backend` klasörünü bağlayın.
-2. `backend/.env` içindeki environment değişkenlerini Render ayarlarından ekleyin.
-3. Deploy sonrası verilen Render API URL’ini frontend `.env` dosyasına `VITE_API_URL` olarak ekleyin.
+- Render üzerinde backend deploy edildi: [https://codeway-backend-amuj.onrender.com](https://codeway-backend-amuj.onrender.com)
+Not: Backend root endpoint (`/`) boş döner. Test için `/api/config` veya `/api/admin/config` endpoint’lerini kullanın.
