@@ -1,25 +1,21 @@
 import axios from "axios";
-import { getAuth } from "firebase/auth";
 
-const BASE_URL = "http://localhost:3001";
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+    "Content-Type": "application/json",
+  },
+});
 
-// Public configs (mobil)
-export const fetchConfigs = async () => {
-  return axios.get(`${BASE_URL}/api/config`, {
-    headers: { Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}` }
-  });
+export const addConfig = async (data) => {
+  return api.post("/api/admin/config", data);
 };
 
-// Admin configs (güncelleme)
-export const updateConfig = async (key, value, audiences = {}) => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (!user) throw new Error("Not authenticated");
+export const deleteConfig = async (key) => {
+  return api.delete(`/api/admin/config/${key}`);
+};
 
-  const token = await user.getIdToken();
-  return axios.put(
-    `${BASE_URL}/api/admin/config/${key}`,
-    { value, clientUpdatedAt: Date.now(), audiences },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+export const getConfigs = async () => {
+  return api.get("/api/admin/config");
 };
