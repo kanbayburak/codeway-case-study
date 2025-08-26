@@ -2,7 +2,6 @@
   <DefaultLayout>
     <div v-if="!loading" class="w-full h-full">
       <table class="w-full border border-gray-700 bg-gray-900 shadow-lg table-fixed">
-     
         <thead>
           <tr class="bg-gray-800 text-gray-300 text-sm md:text-base">
             <th class="px-6 py-4 text-left w-1/5">Parameter Key</th>
@@ -100,6 +99,9 @@ const newValue = ref("");
 const newDescription = ref("");
 const editIndex = ref(null);
 
+// .env'den backend URL'sini oku
+const API_URL = import.meta.env.VITE_API_URL;
+
 onMounted(async () => {
   try {
     const auth = getAuth();
@@ -110,8 +112,7 @@ onMounted(async () => {
     }
     const userToken = await user.getIdToken();
 
-
-    const res = await axios.get("http://localhost:3001/api/admin/config", {
+    const res = await axios.get(`${API_URL}/api/admin/config`, {
       headers: { Authorization: `Bearer ${userToken}` },
     });
 
@@ -145,7 +146,7 @@ const saveConfig = async () => {
   try {
     if (editIndex.value !== null) {
       await axios.put(
-        `http://localhost:3001/api/admin/config/${newKey.value}`,
+        `${API_URL}/api/admin/config/${newKey.value}`,
         {
           value: newValue.value,
           description: newDescription.value || "No description",
@@ -163,7 +164,7 @@ const saveConfig = async () => {
       editIndex.value = null;
     } else {
       await axios.post(
-        "http://localhost:3001/api/admin/config",
+        `${API_URL}/api/admin/config`,
         {
           key: newKey.value,
           value: newValue.value,
@@ -185,7 +186,7 @@ const saveConfig = async () => {
     newValue.value = "";
     newDescription.value = "";
   } catch (err) {
-    console.error("Save error:", err);
+    console.error("Save error:", err.response?.data || err.message);
     alert("Config kaydedilemedi!");
   }
 };
@@ -199,7 +200,7 @@ const deleteConfig = async (index) => {
   const key = parameters.value[index].key;
 
   try {
-    await axios.delete(`http://localhost:3001/api/admin/config/${key}`, {
+    await axios.delete(`${API_URL}/api/admin/config/${key}`, {
       headers: { Authorization: `Bearer ${userToken}` },
     });
 
@@ -209,7 +210,6 @@ const deleteConfig = async (index) => {
     alert("Config silinemedi!");
   }
 };
-
 
 const editConfig = (index) => {
   const param = parameters.value[index];
